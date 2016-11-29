@@ -12,7 +12,7 @@
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 #define SCREEN_WIDTH_RATIO (SCREEN_WIDTH / 320)
-#define kHeaderViewHeight 180 * SCREEN_WIDTH_RATIO
+#define kHeaderViewHeight 210 * SCREEN_WIDTH_RATIO
 @interface UserInfoHeaderView : UIView
 
 @property (nonatomic,assign) BOOL updateUserInfo;

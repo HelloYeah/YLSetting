@@ -72,7 +72,7 @@
     if (headH <= 64 ) {
         headH = 64;
     }
-    NSLog(@"%f",scrollView.contentOffset.y);
+    
     [self.headerView alphaWithHeight:headH orignHeight:kHeaderViewHeight];
 }
 

@@ -9,7 +9,6 @@
 #import "UserInfoHeaderView.h"
 #import "UIView+Frame.h"
 
-
 #define SKUserInfoHeaderImageWidth (60 * SCREEN_WIDTH_RATIO)
 #define SKUserInfoVipImageWidth (60 * SCREEN_WIDTH_RATIO)
 #define SKUserInfoVipImageHeight (25 * SCREEN_WIDTH_RATIO)
@@ -33,9 +32,6 @@ static const NSInteger SKUserInfoSpace = 10;
 /** 公司 */
 @property (nonatomic, strong) UILabel *companyLabel;
 
-@property (nonatomic,assign) CGFloat  orginHeight;
-
-
 @end
 
 @implementation UserInfoHeaderView
@@ -56,29 +52,30 @@ static const NSInteger SKUserInfoSpace = 10;
 - (void)setUpSubviews
 {
     self.bgImgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height)];
-    self.bgImgView.image = [UIImage imageNamed:@"LoginBackground"];
+    self.bgImgView.image = [UIImage imageNamed:@"LOL"];
+    self.clipsToBounds = YES;
     self.bgImgView.userInteractionEnabled = YES;
     [self addSubview:self.bgImgView];
     self.HeaderBorderView = [[UIView alloc]initWithFrame:CGRectMake((self.width - SKUserInfoHeaderImageWidth)/2 - SKUserInfoSpace / 2,
                                                                     (self.height - SKUserInfoHeaderImageWidth)/2 -SKUserInfoSpace / 2,
                                                                     SKUserInfoHeaderImageWidth + SKUserInfoSpace,
                                                                     SKUserInfoHeaderImageWidth + SKUserInfoSpace)];
-    self.HeaderBorderView.backgroundColor = [UIColor colorWithWhite:.0f alpha:0.08];
+    self.HeaderBorderView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.3];
     self.HeaderBorderView.layer.cornerRadius = SKUserInfoHeaderImageWidth / 2 + SKUserInfoSpace / 2;
     self.HeaderBorderView.layer.masksToBounds = YES;
-    [self.bgImgView addSubview:self.HeaderBorderView];
+    [self addSubview:self.HeaderBorderView];
     self.headerImgView = [[UIImageView alloc]initWithFrame:CGRectMake((self.width - SKUserInfoHeaderImageWidth)/2,
                                                                       (self.height - SKUserInfoHeaderImageWidth)/2,
                                                                       SKUserInfoHeaderImageWidth,
                                                                       SKUserInfoHeaderImageWidth)];
     self.headerImgView.layer.cornerRadius = SKUserInfoHeaderImageWidth / 2;
     self.headerImgView.layer.masksToBounds = YES;
-    [self.bgImgView addSubview:self.headerImgView];
+    [self addSubview:self.headerImgView];
     self.vipImgView = [[UIImageView alloc]initWithFrame:CGRectMake((self.width - SKUserInfoVipImageWidth)/2,
                                                                    self.headerImgView.top - SKUserInfoVipImageHeight,
                                                                    SKUserInfoVipImageWidth,
                                                                    SKUserInfoVipImageHeight)];
-    [self.bgImgView addSubview:self.vipImgView];
+    [self addSubview:self.vipImgView];
     self.nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(SKUserInfoSpace,
                                                               self.headerImgView.bottom + SKUserInfoSpace,
                                                               SCREEN_WIDTH - 2 * SKUserInfoSpace,
@@ -86,7 +83,7 @@ static const NSInteger SKUserInfoSpace = 10;
     self.nameLabel.textAlignment = NSTextAlignmentCenter;
     self.nameLabel.font = [UIFont systemFontOfSize:16];
     self.nameLabel.textColor = [UIColor whiteColor];
-    [self.bgImgView addSubview:self.nameLabel];
+    [self addSubview:self.nameLabel];
     self.companyLabel = [[UILabel alloc]initWithFrame:CGRectMake(SKUserInfoSpace,
                                                                  self.nameLabel.bottom,
                                                                  SCREEN_WIDTH - 2 * SKUserInfoSpace,
@@ -94,7 +91,7 @@ static const NSInteger SKUserInfoSpace = 10;
     self.companyLabel.textAlignment = NSTextAlignmentCenter;
     self.companyLabel.font = [UIFont systemFontOfSize:14];
     self.companyLabel.textColor = [UIColor whiteColor];
-    [self.bgImgView addSubview:self.companyLabel];
+    [self addSubview:self.companyLabel];
     
     self.nameLabel.backgroundColor = [UIColor clearColor];
     self.headerImgView.userInteractionEnabled = YES;
@@ -106,9 +103,6 @@ static const NSInteger SKUserInfoSpace = 10;
     self.companyLabel.userInteractionEnabled = YES;
     [self.companyLabel addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(checkUserInfomation)]];
     
-    self.orginHeight = self.height;
-    
-    
 }
 
 /**
@@ -119,7 +113,7 @@ static const NSInteger SKUserInfoSpace = 10;
     self.companyLabel.text = @"来自 星星的你";
     self.nameLabel.text = @"昵称: Hello World";
     self.vipImgView.image = [UIImage imageNamed:@"user_vip_crown"];
-    self.headerImgView.image = [UIImage imageNamed:@"avatar_placeholder"];
+    self.headerImgView.image = [UIImage imageNamed:@"lion"];
     
 }
 
@@ -133,16 +127,21 @@ static const NSInteger SKUserInfoSpace = 10;
 - (void)alphaWithHeight:(CGFloat)height orignHeight:(CGFloat)orignHeight{
     
     CGFloat offsetY = height - orignHeight;
-
+    CGFloat alpha = (height - 64) / (orignHeight - 64);
+    CGFloat scale = MAX(alpha, 1);
     self.frame = CGRectMake(0, 0, SCREEN_WIDTH, height);
-    self.bgImgView.frame = CGRectMake(0, 0, SCREEN_WIDTH, height);
+    self.bgImgView.width =  SCREEN_WIDTH * scale;
+    self.bgImgView.height = MAX(height * scale, orignHeight);
+    self.bgImgView.center = CGPointMake(self.width * 0.5, self.height * 0.5);
+    
     self.headerImgView.top = (orignHeight - SKUserInfoHeaderImageWidth)/2 + offsetY;
     self.HeaderBorderView.top = (orignHeight - SKUserInfoHeaderImageWidth)/2 - SKUserInfoSpace / 2 + offsetY;
     self.vipImgView.top = self.headerImgView.top - SKUserInfoVipImageHeight;
     self.nameLabel.top = self.headerImgView.bottom + SKUserInfoSpace;
     self.companyLabel.top = self.nameLabel.bottom;
 
-    CGFloat alpha = (height - 64) / (orignHeight - 64);
+    
+    
     self.HeaderBorderView.alpha = alpha;
     self.headerImgView.alpha = alpha;
     self.nameLabel.alpha = alpha;
